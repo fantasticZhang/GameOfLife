@@ -3,14 +3,14 @@
     <canvas ref="gamePanel" id="gamePanel" width="700" height="700" @click="getPosition">
     </canvas>
     <br>
-    <button @click="startAnimation">
+    <button :disabled="!isStartFlag" @click="startAnimation">
       开始
     </button>
     <button @click="stopAnimation">
       停止
     </button>
     <input type="range" id="animationSpeed" v-model="animationSpeed" value="0.5" min="0.1" max="10" step="0.1">
-
+    <span>{{animationSpeed}}秒</span>
   </div>
 </template>
 <script>
@@ -20,6 +20,7 @@
       return {
         gamePanel: '',
         animationSpeed: .5,
+        isStartFlag: true
       }
     },
     methods: {
@@ -31,13 +32,14 @@
         };
         ;
         this.gamePanel.setPosition(currentPosition);
-        //  this.gamePanel.startAnimation(1);
       },
       startAnimation(){
-          this.gamePanel.startAnimation(.5);
+        this.gamePanel.startAnimation(this.animationSpeed);
+        this.isStartFlag = false;
       },
       stopAnimation(){
-          this.gamePanel.stopAnimation();
+        this.gamePanel.stopAnimation();
+        this.isStartFlag = true;
       }
     },
     mounted: function () {
