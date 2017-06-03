@@ -14,7 +14,9 @@ export default function (param) {
   console.log(canvas);
   let context = canvas.getContext('2d');
   let cellWidth;
-  let cellHeight
+  let cellHeight;
+
+  let canvasInterval;
 
   // 初始化二维数组
   let initState = new Array();
@@ -25,17 +27,12 @@ export default function (param) {
     }
   }
 
-  let init = function () {
-    let canvasWidth = 600;
-    let canvasHeight = 600;
-    // let canvasWidth = canvas.width;
-    // let canvasHeight = canvas.height;
+  this.init = function () {
+    let canvasWidth = canvas.width;
+    let canvasHeight = canvas.height;
     console.log(canvasHeight, canvasWidth);
     cellWidth = canvasWidth / widthNumber;
-    cellHeight = canvasHeight / heightNumber;
-    context.fillStyle = '#37A2B2';
-    context.fillRect(0, 0, canvasWidth, canvasHeight);
-
+    cellHeight = canvasHeight / heightNumber
 
     // 画出小放格子
     context.lineWidth = 1;
@@ -57,10 +54,32 @@ export default function (param) {
     context.fillStyle = '#C5C159';
     initLive.forEach(item => {
       initState[item[0]][item[1]] = 1;
-      context.fillRect(item[0] * cellWidth + 1, item[1] * cellHeight + 1, cellWidth - 1, cellHeight - 1)
     });
-    console.log(initState);
+
+    drawCanvas();
   };
+
+  this.setPosition = function (position) {
+    let x = Math.floor(position.x/cellWidth);
+    let y = Math.floor(position.y/cellHeight);
+    initState[x][y] = 1;
+    drawCanvas();
+  }
+  let drawCanvas = function () {
+    // 绘制初试画布状态
+    for (let index = 0; index < initState.length; index++) {
+      for (let subIndex = 0; subIndex < initState[index].length; subIndex++) {
+        context.clearRect(index * cellWidth + 1, subIndex * cellHeight + 1, cellWidth - 1, cellHeight - 1);
+        if (initState[index][subIndex] === 0) {
+          context.fillStyle = '#37A2B2';
+          context.fillRect(index * cellWidth + 1, subIndex * cellHeight + 1, cellWidth - 1, cellHeight - 1);
+        }else{
+          context.fillStyle = '#C5C159';
+          context.fillRect(index * cellWidth + 1, subIndex * cellHeight + 1, cellWidth - 1, cellHeight - 1);
+        }
+      }
+    }
+  }
 
   let aliveCount = function (x, y) {
     let aliveCount = 0;
@@ -106,10 +125,8 @@ export default function (param) {
     for (let index = 0; index < initState.length; index++) {
       for (let subIndex = 0; subIndex < initState[index].length; subIndex++) {
         let aliveCounts = aliveCount(index, subIndex);
-        console.log(aliveCounts);
         if (aliveCounts === 3) {
           nextState[index][subIndex] = 1;
-          console.log('next', nextState[index][subIndex], index, subIndex);
         } else if (aliveCounts === 2) {
           nextState[index][subIndex] = initState[index][subIndex];
         } else {
@@ -119,22 +136,28 @@ export default function (param) {
     }
     initState = nextState;
 
-    // 重新渲染页面
-    for (let index = 0; index < initState.length; index++) {
-      for (let subIndex = 0; subIndex < initState[index].length; subIndex++) {
-        context.clearRect(index * cellWidth + 1, subIndex * cellHeight + 1, cellWidth - 1, cellHeight - 1);
-        if (initState[index][subIndex] === 0) {
-          context.fillStyle = '#37A2B2';
-          context.fillRect(index * cellWidth + 1, subIndex * cellHeight + 1, cellWidth - 1, cellHeight - 1);
-        }else{
-          context.fillStyle = '#C5C159';
-          context.fillRect(index * cellWidth + 1, subIndex * cellHeight + 1, cellWidth - 1, cellHeight - 1);
-        }
-      }
-    }
-  };
-  init();
 
-  setInterval(update,1000);
+    // 重新渲染页面
+    drawCanvas();
+  };
+
+  //开始执行动画
+  this.startAnimation = function (time) {
+    canvasInterval = setInterval(update,time*1000);
+  };
+  // init();
+
+  //停止执行动画
+  this.stopAnimation = function () {
+    clearInterval(canvasInterval);
+    // clearInterval(canvasInterval);
+  };
+
+  //下一步
+  this.nextAnimation = function () {
+    update();
+  };
+
+  // setInterval(update,1000);
 };
 
