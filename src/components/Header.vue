@@ -14,7 +14,7 @@
 
 <style lang="scss">
   header {
-    color: red;
+    color: #f7f1f7;
     h1 {
       margin: 0;
     }

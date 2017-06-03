@@ -3,24 +3,13 @@
     <canvas ref="gamePanel" id="gamePanel" width="700" height="700" @click="getPosition">
     </canvas>
     <br>
-    <button :disabled="!isStartFlag" @click="startAnimation">
-      开始
-    </button>
-    <button @click="stopAnimation">
-      停止
-    </button>
-    <input type="range" id="animationSpeed" v-model="animationSpeed" value="0.5" min="0.1" max="10" step="0.1">
-    <span>{{animationSpeed}}秒</span>
   </div>
 </template>
 <script>
-  import Game from '../game';
   export default{
+    props: ['gamePanel'],
     data() {
       return {
-        gamePanel: '',
-        animationSpeed: .5,
-        isStartFlag: true
       }
     },
     methods: {
@@ -30,31 +19,14 @@
           x: event.clientX - rect.left,
           y: event.clientY - rect.top
         };
-        ;
         this.gamePanel.setPosition(currentPosition);
       },
-      startAnimation(){
-        this.gamePanel.startAnimation(this.animationSpeed);
-        this.isStartFlag = false;
-      },
-      stopAnimation(){
-        this.gamePanel.stopAnimation();
-        this.isStartFlag = true;
-      }
+
     },
-    mounted: function () {
-      this.gamePanel = new Game({
-        'canvasId': 'gamePanel',
-        'widthNumber': 50,
-        'heightNumber': 50,
-        'initLive': [[10, 30], [11, 30], [12, 24], [13, 24], [14, 24], [10, 12]]
-      });
-      this.gamePanel.init();
-      //setInterval(this.gamePanel.update(),1000);
-    }
   }
 </script>
 <style lang="scss" scoped>
-  canvas {
+  span {
+    color: #f7f1f7;
   }
 </style>

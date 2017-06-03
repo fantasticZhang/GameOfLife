@@ -11,7 +11,6 @@ export default function (param) {
 
 
   let canvas = document.getElementById(canvasId);
-  console.log(canvas);
   let context = canvas.getContext('2d');
   let cellWidth;
   let cellHeight;
@@ -30,7 +29,6 @@ export default function (param) {
   this.init = function () {
     let canvasWidth = canvas.width;
     let canvasHeight = canvas.height;
-    console.log(canvasHeight, canvasWidth);
     cellWidth = canvasWidth / widthNumber;
     cellHeight = canvasHeight / heightNumber
 
@@ -60,8 +58,8 @@ export default function (param) {
   };
 
   this.setPosition = function (position) {
-    let x = Math.floor(position.x/cellWidth);
-    let y = Math.floor(position.y/cellHeight);
+    let x = Math.floor(position.x / cellWidth);
+    let y = Math.floor(position.y / cellHeight);
     initState[x][y] = 1;
     drawCanvas();
   }
@@ -73,7 +71,7 @@ export default function (param) {
         if (initState[index][subIndex] === 0) {
           context.fillStyle = '#37A2B2';
           context.fillRect(index * cellWidth + 1, subIndex * cellHeight + 1, cellWidth - 1, cellHeight - 1);
-        }else{
+        } else {
           context.fillStyle = '#C5C159';
           context.fillRect(index * cellWidth + 1, subIndex * cellHeight + 1, cellWidth - 1, cellHeight - 1);
         }
@@ -143,7 +141,7 @@ export default function (param) {
 
   //开始执行动画
   this.startAnimation = function (time) {
-    canvasInterval = setInterval(update,time*1000);
+    canvasInterval = setInterval(update, time * 1000);
   };
   // init();
 
@@ -152,6 +150,17 @@ export default function (param) {
     clearInterval(canvasInterval);
     // clearInterval(canvasInterval);
   };
+
+  // 清除所有生命点
+  this.clearAnimation = function () {
+    for (let index = 0; index < widthNumber; index++) {
+      initState[index] = new Array();
+      for (let subIndex = 0; subIndex < heightNumber; subIndex++) {
+        initState[index][subIndex] = 0;
+      }
+    }
+    drawCanvas();
+  }
 
   //下一步
   this.nextAnimation = function () {

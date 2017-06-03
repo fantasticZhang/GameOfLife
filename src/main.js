@@ -5,12 +5,13 @@ import App from './App'
 
 Vue.config.productionTip = false
 
-Vue.component('header-title',require('./components/Header.vue'));
-Vue.component('game-panel',require('./components/GamePanel.vue'));
+Vue.component('header-title', require('./components/Header.vue'));
+Vue.component('game-panel', require('./components/GamePanel.vue'));
+Vue.component('tool-bar', require('./components/ToolBar.vue'));
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   template: '<App/>',
-  components: { App }
+  components: {App}
 })
