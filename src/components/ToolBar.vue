@@ -3,6 +3,9 @@
     <button :disabled="!isStartFlag" @click="startAnimation">
       开始
     </button>
+    <button :disabled="!isStartFlag" @click="oneStepAnimation">
+      单步
+    </button>
     <button @click="stopAnimation">
       停止
     </button>
@@ -22,7 +25,7 @@
         isStartFlag: true
       }
     },
-    props:['gamePanel'],
+    props: ['gamePanel'],
     methods: {
       startAnimation(){
         this.gamePanel.startAnimation(this.animationSpeed);
@@ -34,6 +37,9 @@
       },
       clearAnimation(){
         this.gamePanel.clearAnimation();
+      },
+      oneStepAnimation(){
+        this.gamePanel.nextAnimation();
       }
     }
   }
