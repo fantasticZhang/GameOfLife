@@ -7,6 +7,9 @@ export default function (param) {
   let canvasId = param.canvasId || 'gamePanel';
   let widthNumber = param.widthNumber || 100;
   let heightNumber = param.heightNumber || 100;
+  let initLive = param.initLive || [[10, 24], [11, 24], [12, 24], [13, 24], [14, 24]];
+
+
   let canvas = document.getElementById(canvasId);
   console.log(canvas);
   let context = canvas.getContext('2d');
@@ -52,7 +55,6 @@ export default function (param) {
 
     // 初始化生命状态
     context.fillStyle = '#C5C159';
-    let initLive = [[10, 24], [11, 24], [12, 24], [13, 24], [14, 24]];
     initLive.forEach(item => {
       initState[item[0]][item[1]] = 1;
       context.fillRect(item[0] * cellWidth + 1, item[1] * cellHeight + 1, cellWidth - 1, cellHeight - 1)
@@ -134,6 +136,5 @@ export default function (param) {
   init();
 
   setInterval(update,1000);
-  // setTimeout(update, 33);
 };
 
