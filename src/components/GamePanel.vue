@@ -25,8 +25,4 @@
     },
   }
 </script>
-<style lang="scss" scoped>
-  span {
-    color: #f7f1f7;
-  }
-</style>
+
