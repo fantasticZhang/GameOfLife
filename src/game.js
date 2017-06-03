@@ -62,7 +62,7 @@ export default function (param) {
     let y = Math.floor(position.y / cellHeight);
     initState[x][y] = 1;
     drawCanvas();
-  }
+  };
   let drawCanvas = function () {
     // 绘制初试画布状态
     for (let index = 0; index < initState.length; index++) {
@@ -143,7 +143,6 @@ export default function (param) {
   this.startAnimation = function (time) {
     canvasInterval = setInterval(update, time * 1000);
   };
-  // init();
 
   //停止执行动画
   this.stopAnimation = function () {
