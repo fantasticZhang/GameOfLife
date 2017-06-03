@@ -10,6 +10,8 @@ export default function (param) {
   let canvas = document.getElementById(canvasId);
   console.log(canvas);
   let context = canvas.getContext('2d');
+  let cellWidth;
+  let cellHeight
 
   // 初始化二维数组
   let initState = new Array();
@@ -26,8 +28,8 @@ export default function (param) {
     // let canvasWidth = canvas.width;
     // let canvasHeight = canvas.height;
     console.log(canvasHeight, canvasWidth);
-    let cellWidth = canvasWidth / widthNumber;
-    let cellHeight = canvasHeight / heightNumber;
+    cellWidth = canvasWidth / widthNumber;
+    cellHeight = canvasHeight / heightNumber;
     context.fillStyle = '#37A2B2';
     context.fillRect(0, 0, canvasWidth, canvasHeight);
 
@@ -60,28 +62,28 @@ export default function (param) {
 
   let aliveCount = function (x, y) {
     let aliveCount = 0;
-    if(x>=1 && y>=1){
-      initState[x-1][y-1] === 1 ? aliveCount= aliveCount+1 : aliveCount;
+    if (x >= 1 && y >= 1) {
+      initState[x - 1][y - 1] === 1 ? aliveCount = aliveCount + 1 : aliveCount;
     }
-    if(x>=1){
-      initState[x-1][y] === 1 ? aliveCount= aliveCount+1 : aliveCount;
+    if (x >= 1) {
+      initState[x - 1][y] === 1 ? aliveCount = aliveCount + 1 : aliveCount;
     }
-    if(x>=1 && y<initState[x].length-1){
-      initState[x-1][y+1] === 1 ? aliveCount= aliveCount+1 : aliveCount;
+    if (x >= 1 && y < initState[x].length - 1) {
+      initState[x - 1][y + 1] === 1 ? aliveCount = aliveCount + 1 : aliveCount;
     }
-    if(y>=1){
-      initState[x][y-1] === 1 ? aliveCount= aliveCount+1 : aliveCount;
+    if (y >= 1) {
+      initState[x][y - 1] === 1 ? aliveCount = aliveCount + 1 : aliveCount;
     }
-    if (y>=1 && x<initState.length-1) {
+    if (y >= 1 && x < initState.length - 1) {
       initState[x + 1][y - 1] === 1 ? aliveCount = aliveCount + 1 : aliveCount;
     }
-    if(x<initState.length-1){
-      initState[x+1][y] === 1 ? aliveCount= aliveCount+1 : aliveCount;
+    if (x < initState.length - 1) {
+      initState[x + 1][y] === 1 ? aliveCount = aliveCount + 1 : aliveCount;
     }
-    if (x<initState.length-1 && y<initState[x].length-1) {
+    if (x < initState.length - 1 && y < initState[x].length - 1) {
       initState[x + 1][y + 1] === 1 ? aliveCount = aliveCount + 1 : aliveCount;
     }
-    if (y<initState[x].length-1) {
+    if (y < initState[x].length - 1) {
       initState[x][y + 1] === 1 ? aliveCount = aliveCount + 1 : aliveCount;
     }
     return aliveCount;
@@ -101,31 +103,37 @@ export default function (param) {
     // 更新下一个状态
     for (let index = 0; index < initState.length; index++) {
       for (let subIndex = 0; subIndex < initState[index].length; subIndex++) {
-          let aliveCounts = aliveCount(index,subIndex);
-          console.log(aliveCounts);
-          if(aliveCounts > 2){
-            nextState[index][subIndex] = 1;
-            console.log('next',nextState[index][subIndex],index,subIndex);
-          }else if(aliveCounts === 2){
-            nextState[index][subIndex] = initState[index][subIndex];
-          } else{
-            nextState[index][subIndex] = 0 ;
-          }
+        let aliveCounts = aliveCount(index, subIndex);
+        console.log(aliveCounts);
+        if (aliveCounts === 3) {
+          nextState[index][subIndex] = 1;
+          console.log('next', nextState[index][subIndex], index, subIndex);
+        } else if (aliveCounts === 2) {
+          nextState[index][subIndex] = initState[index][subIndex];
+        } else {
+          nextState[index][subIndex] = 0;
+        }
       }
     }
     initState = nextState;
 
     // 重新渲染页面
-
-    for(let index = 0;index < initState.length;index++){
-      for(let subIndex = ){
-
+    for (let index = 0; index < initState.length; index++) {
+      for (let subIndex = 0; subIndex < initState[index].length; subIndex++) {
+        context.clearRect(index * cellWidth + 1, subIndex * cellHeight + 1, cellWidth - 1, cellHeight - 1);
+        if (initState[index][subIndex] === 0) {
+          context.fillStyle = '#37A2B2';
+          context.fillRect(index * cellWidth + 1, subIndex * cellHeight + 1, cellWidth - 1, cellHeight - 1);
+        }else{
+          context.fillStyle = '#C5C159';
+          context.fillRect(index * cellWidth + 1, subIndex * cellHeight + 1, cellWidth - 1, cellHeight - 1);
+        }
       }
     }
   };
   init();
 
-  // setInterval(update,33);
-  setTimeout(update, 33);
+  setInterval(update,1000);
+  // setTimeout(update, 33);
 };
 
