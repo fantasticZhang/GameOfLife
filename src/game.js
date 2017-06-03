@@ -9,15 +9,13 @@ export default function (param) {
   let heightNumber = param.heightNumber || 100;
   let initLive = param.initLive || [[10, 24], [11, 24], [12, 24], [13, 24], [14, 24]];
 
-
   let canvas = document.getElementById(canvasId);
   let context = canvas.getContext('2d');
   let cellWidth;
   let cellHeight;
-
   let canvasInterval;
 
-  // 初始化二维数组
+  // initial cell with two-dimension array
   let initState = new Array();
   for (let index = 0; index < widthNumber; index++) {
     initState[index] = new Array();
@@ -26,13 +24,13 @@ export default function (param) {
     }
   }
 
+  // initial game state
   this.init = function () {
     let canvasWidth = canvas.width;
     let canvasHeight = canvas.height;
     cellWidth = canvasWidth / widthNumber;
     cellHeight = canvasHeight / heightNumber
-
-    // 画出小放格子
+    // draw all cells
     context.lineWidth = 1;
     context.strokeStyle = '#fff';
     for (let index = 0; index < canvasWidth; index += cellWidth) {
@@ -48,23 +46,23 @@ export default function (param) {
       context.stroke();
     }
 
-    // 初始化生命状态
-    context.fillStyle = '#C5C159';
+    // initial cell life state
     initLive.forEach(item => {
       initState[item[0]][item[1]] = 1;
     });
-
     drawCanvas();
   };
 
+  // set the clicked cell state
   this.setPosition = function (position) {
     let x = Math.floor(position.x / cellWidth);
     let y = Math.floor(position.y / cellHeight);
     initState[x][y] = 1;
     drawCanvas();
   };
+
+  // draw canvas with all cells
   let drawCanvas = function () {
-    // 绘制初试画布状态
     for (let index = 0; index < initState.length; index++) {
       for (let subIndex = 0; subIndex < initState[index].length; subIndex++) {
         context.clearRect(index * cellWidth + 1, subIndex * cellHeight + 1, cellWidth - 1, cellHeight - 1);
@@ -79,6 +77,7 @@ export default function (param) {
     }
   }
 
+  // return the surround cell's alive count
   let aliveCount = function (x, y) {
     let aliveCount = 0;
     if (x >= 1 && y >= 1) {
@@ -108,9 +107,8 @@ export default function (param) {
     return aliveCount;
   };
 
+  // initial next life state
   let update = function () {
-
-    // 初始化下一个状态
     let nextState = new Array();
     for (let index = 0; index < widthNumber; index++) {
       nextState[index] = new Array();
@@ -118,8 +116,6 @@ export default function (param) {
         nextState[index][subIndex] = 0;
       }
     }
-
-    // 更新下一个状态
     for (let index = 0; index < initState.length; index++) {
       for (let subIndex = 0; subIndex < initState[index].length; subIndex++) {
         let aliveCounts = aliveCount(index, subIndex);
@@ -133,24 +129,20 @@ export default function (param) {
       }
     }
     initState = nextState;
-
-
-    // 重新渲染页面
     drawCanvas();
   };
 
-  //开始执行动画
+  // start animation
   this.startAnimation = function (time) {
     canvasInterval = setInterval(update, time * 1000);
   };
 
-  //停止执行动画
+  // stop animation
   this.stopAnimation = function () {
     clearInterval(canvasInterval);
-    // clearInterval(canvasInterval);
   };
 
-  // 清除所有生命点
+  // clear all alive cells
   this.clearAnimation = function () {
     for (let index = 0; index < widthNumber; index++) {
       initState[index] = new Array();
@@ -161,11 +153,9 @@ export default function (param) {
     drawCanvas();
   }
 
-  //下一步
+  // go to the next step animation
   this.nextAnimation = function () {
     update();
   };
-
-  // setInterval(update,1000);
 };
 
