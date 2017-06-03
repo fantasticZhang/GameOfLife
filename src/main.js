@@ -5,6 +5,9 @@ import App from './App'
 
 Vue.config.productionTip = false
 
+Vue.component('header-title',require('./components/Header.vue'));
+Vue.component('game-panel',require('./components/GamePanel.vue'));
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
